@@ -23,6 +23,9 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
 #endif
     distribution(0, 100)
 {
+    addParameter(filterBasedOnChance = new juce::AudioParameterBool("onChance", "Filter based on chance", true));
+    addParameter(percentage = new juce::AudioParameterInt("percentage", "Chance for notes to go through", 0, 100, 100));
+    addParameter(allowedMessageFrequency = new juce::AudioParameterInt("allowedMessageFrequency", "One in X messages go through", 1, 1000, 1));
 }
 
 TriggerConditionAudioProcessor::~TriggerConditionAudioProcessor()

@@ -58,12 +58,11 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-    bool filterBasedOnChance { true };
     int messageCount { 0 };
     
-    // Should be parameters
-    int percentage { 0 };
-    int allowedMessageFrequency { 0 };
+    juce::AudioParameterBool* filterBasedOnChance;
+    juce::AudioParameterInt* percentage;
+    juce::AudioParameterInt* allowedMessageFrequency;
     
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;
