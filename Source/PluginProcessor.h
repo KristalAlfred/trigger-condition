@@ -57,6 +57,13 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    bool filterBasedOnChance { true };
+    int messageCount { 0 };
+    
+    // Should be parameters
+    int percentage { 0 };
+    int allowedMessageFrequency { 0 };
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TriggerConditionAudioProcessor)
 };
