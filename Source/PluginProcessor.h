@@ -60,7 +60,7 @@ public:
 private:
     int messageCount { 0 };
     
-    juce::AudioParameterBool* filterBasedOnChance;
+    juce::AudioParameterBool* chanceMode;
     juce::AudioParameterInt* percentage;
     juce::AudioParameterInt* allowedMessageFrequency;
     
