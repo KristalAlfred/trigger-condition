@@ -24,7 +24,7 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
     distribution(0, 100)
 {
     addParameter((chanceMode = new juce::AudioParameterBool(juce::ParameterID { "chanceMode", 1 }, "Filter based on chance", true)));
-    addParameter((percentage = new juce::AudioParameterInt(juce::ParameterID { "percentage", 1 }, "Chance for notes to go through", 0, 100, 50)));
+    addParameter((percentage = new juce::AudioParameterInt(juce::ParameterID { "percentage", 1 }, "Chance for notes to go through", 0, 100, 10)));
     addParameter((allowedMessageFrequency = new juce::AudioParameterInt(juce::ParameterID { "allowedMessageFrequency", 1 }, "One in X messages go through", 1, 1000, 1)));
 }
 
@@ -149,11 +149,14 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
      */
     
     juce::MidiBuffer filteredMidi;
-    juce::MidiMessageSequence seq;
     for (const auto metadata : midiMessages) {
         const auto message { metadata.getMessage() };
-        if (!(randomNumber() < 50 && message.isNoteOn())) {
+        
+        if (chanceMode->get()) {
+            if (message.isNoteOn() && randomNumber() > percentage->get()) continue;
             filteredMidi.addEvent(message, metadata.samplePosition);
+        } else {
+            // TODO: Implement :)
         }
     }
     midiMessages.swapWith(filteredMidi);
