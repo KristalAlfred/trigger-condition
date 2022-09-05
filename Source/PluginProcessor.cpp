@@ -8,7 +8,6 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include <random>
 
 //==============================================================================
 TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
@@ -20,8 +19,9 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif
+    distribution(0, 100)
 {
 }
 
@@ -137,10 +137,12 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // Since this is a MIDI-plugin, we shouldn't have any audio channels.
     jassert(buffer.getNumChannels() == 0);
     
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0, 100);
-    
-    auto randomNumber { std::bind(distribution, generator) };
+    /* Here we want to check for MIDI messages to stop. We only want to
+     stop note on/off events since it isn't desirable to halt pitch wheel changes
+     and stuff like that. Also, for every note on we catch, we should catch a corresponding
+     note off. There are two modes, chance based gating (only X% of notes make it through) and
+     periodic gating (every X notes make it through).
+     */
     
     // Pseudo code...
     if (filterBasedOnChance) {

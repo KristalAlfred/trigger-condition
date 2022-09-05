@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include <random>
 
 //==============================================================================
 /**
@@ -63,6 +64,10 @@ private:
     // Should be parameters
     int percentage { 0 };
     int allowedMessageFrequency { 0 };
+    
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution;
+    std::function<int()> randomNumber { std::bind(distribution, generator) };
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TriggerConditionAudioProcessor)
