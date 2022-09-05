@@ -24,7 +24,7 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
     distribution(0, 100)
 {
     addParameter((filterBasedOnChance = new juce::AudioParameterBool(juce::ParameterID { "onChance", 1 }, "Filter based on chance", true)));
-    addParameter((percentage = new juce::AudioParameterInt(juce::ParameterID { "percentage", 1 }, "Chance for notes to go through", 0, 100, 100)));
+    addParameter((percentage = new juce::AudioParameterInt(juce::ParameterID { "percentage", 1 }, "Chance for notes to go through", 0, 100, 50)));
     addParameter((allowedMessageFrequency = new juce::AudioParameterInt(juce::ParameterID { "allowedMessageFrequency", 1 }, "One in X messages go through", 1, 1000, 1)));
 }
 
@@ -147,22 +147,31 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
      note off. There are two modes, chance based gating (only X% of notes make it through) and
      periodic gating (every X notes make it through).
      */
-    
-    // Pseudo code...
-    if (filterBasedOnChance) {
-        for (auto midi : midiMessages) {
-            if (randomNumber() >= percentage->get()) {
-                // delete midi message
-            }
-        }
-    } else {
-        for (auto midi : midiMessages) {
-            if (messageCount < allowedMessageFrequency->get()) {
-                // delete midi message
-            }
-            ++messageCount;
+    juce::MidiBuffer filteredMidi;
+    juce::MidiMessageSequence seq;
+    for (const auto metadata : midiMessages) {
+        const auto message { metadata.getMessage() };
+        if (!(randomNumber() < 50 && message.isNoteOn())) {
+            filteredMidi.addEvent(message, metadata.samplePosition);
         }
     }
+    midiMessages.swapWith(filteredMidi);
+    
+    // Pseudo code...
+//    if (filterBasedOnChance) {
+//        for (auto midi : midiMessages) {
+//            if (randomNumber() >= percentage->get()) {
+//                // delete midi message
+//            }
+//        }
+//    } else {
+//        for (auto midi : midiMessages) {
+//            if (messageCount < allowedMessageFrequency->get()) {
+//                // delete midi message
+//            }
+//            ++messageCount;
+//        }
+//    }
 }
 
 //==============================================================================
