@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="Y1bedl" name="TriggerCondition" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsMidiEffectPlugin">
   <MAINGROUP id="A5215k" name="TriggerCondition">
     <GROUP id="{1BC8CD3F-3D42-4C50-53E1-21C830523C71}" name="Source">
       <FILE id="ISfmt7" name="PluginProcessor.cpp" compile="1" resource="0"
