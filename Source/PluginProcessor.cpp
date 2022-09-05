@@ -23,9 +23,9 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
 #endif
     distribution(0, 100)
 {
-    addParameter(filterBasedOnChance = new juce::AudioParameterBool("onChance", "Filter based on chance", true));
-    addParameter(percentage = new juce::AudioParameterInt("percentage", "Chance for notes to go through", 0, 100, 100));
-    addParameter(allowedMessageFrequency = new juce::AudioParameterInt("allowedMessageFrequency", "One in X messages go through", 1, 1000, 1));
+    addParameter((filterBasedOnChance = new juce::AudioParameterBool(juce::ParameterID { "onChance", 1 }, "Filter based on chance", true)));
+    addParameter((percentage = new juce::AudioParameterInt(juce::ParameterID { "percentage", 1 }, "Chance for notes to go through", 0, 100, 100)));
+    addParameter((allowedMessageFrequency = new juce::AudioParameterInt(juce::ParameterID { "allowedMessageFrequency", 1 }, "One in X messages go through", 1, 1000, 1)));
 }
 
 TriggerConditionAudioProcessor::~TriggerConditionAudioProcessor()
@@ -103,8 +103,9 @@ void TriggerConditionAudioProcessor::prepareToPlay (double sampleRate, int sampl
 
 void TriggerConditionAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+    jassert(filterBasedOnChance != nullptr);
+    jassert(percentage != nullptr);
+    jassert(allowedMessageFrequency != nullptr);
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -150,13 +151,13 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // Pseudo code...
     if (filterBasedOnChance) {
         for (auto midi : midiMessages) {
-            if (randomNumber() >= percentage) {
+            if (randomNumber() >= percentage->get()) {
                 // delete midi message
             }
         }
     } else {
         for (auto midi : midiMessages) {
-            if (messageCount < allowedMessageFrequency) {
+            if (messageCount < allowedMessageFrequency->get()) {
                 // delete midi message
             }
             ++messageCount;
