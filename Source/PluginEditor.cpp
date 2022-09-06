@@ -10,11 +10,17 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (TriggerConditionAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (TriggerConditionAudioProcessor& p, juce::AudioProcessorValueTreeState& aptvs)
+    : AudioProcessorEditor (&p), aptvs(aptvs), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    
+    frequencySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    
+    frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "allowedMessageFrequency", frequencySlider));
+    chanceButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(aptvs, "chanceMode", chanceModeButton));
+    
+    addAndMakeVisible(&frequencySlider);
+    addAndMakeVisible(&chanceModeButton);
     setSize (400, 300);
 }
 
@@ -30,6 +36,8 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
+    frequencySlider.setBounds(50, 50, getWidth() / 5, getHeight() / 5);
+    chanceModeButton.setBounds(200, 50, getWidth() / 5, getHeight() / 5);
 }
 
 void TriggerConditionAudioProcessorEditor::resized()

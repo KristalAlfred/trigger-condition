@@ -17,7 +17,7 @@
 class TriggerConditionAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    TriggerConditionAudioProcessorEditor (TriggerConditionAudioProcessor&);
+    TriggerConditionAudioProcessorEditor (TriggerConditionAudioProcessor&, juce::AudioProcessorValueTreeState& aptvs);
     ~TriggerConditionAudioProcessorEditor() override;
 
     //==============================================================================
@@ -25,6 +25,11 @@ public:
     void resized() override;
 
 private:
+    juce::AudioProcessorValueTreeState& aptvs;
+    juce::ToggleButton chanceModeButton;
+    juce::Slider frequencySlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> chanceButtonAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencySliderAttachment;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     TriggerConditionAudioProcessor& audioProcessor;
