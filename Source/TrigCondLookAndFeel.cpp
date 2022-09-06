@@ -10,12 +10,32 @@
 
 #include "TrigCondLookAndFeel.h"
 
-void TrigCondLookAndFeel::drawRotarySlider (juce::Graphics &,
+void TrigCondLookAndFeel::drawRotarySlider (juce::Graphics& g,
                                             int x, int y,
-                                            int width,int height,
+                                            int width, int height,
                                             float sliderPosProportional,
                                             float rotaryStartAngle,
                                             float rotaryEndAngle, juce::Slider &)
+{
+    auto radius { (float) juce::jmin(width / 2, height / 2) - 4.f };
+    auto centreX { (float) x + (float) width * 0.5f };
+    auto centreY { (float) y + (float) height * 0.5f };
+    auto rx { centreX - radius };
+    auto ry { centreY - radius };
+    auto rw { radius * 2.0f };
+    auto angle { rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle) };
+    
+    g.setColour(juce::Colours::green);
+    g.fillEllipse(rx, ry, rw, rw);
+    
+    g.setColour(juce::Colours::black);
+    g.drawLine(centreX, centreY,
+               centreX + radius * cos(angle - juce::MathConstants<float>::halfPi),
+               centreY + radius * sin(angle - juce::MathConstants<float>::halfPi),
+               5.f);
+}
+
+void TrigCondLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& label)
 {
     
 }

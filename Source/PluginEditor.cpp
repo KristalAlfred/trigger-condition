@@ -17,6 +17,9 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     frequencySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     probabilitySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     
+    frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    probabilitySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    
     probabilityButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(aptvs, "probabilityMode", probabilityModeButton));
     frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "allowedMessageFrequency", frequencySlider));
     probabilitySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "probability", probabilitySlider));
@@ -44,9 +47,9 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    frequencySlider.setBounds(50, 50, getWidth() / 5, getHeight() / 5);
-    probabilityModeButton.setBounds(200, 50, getWidth() / 5, getHeight() / 5);
-    probabilitySlider.setBounds(300, 50, getWidth() / 5, getHeight() / 5);
+    frequencySlider.setBounds(50, 50, 150, 150);
+    probabilityModeButton.setBounds(200, 50, 150, 150);
+    probabilitySlider.setBounds(300, 50, 150, 150);
 }
 
 void TriggerConditionAudioProcessorEditor::resized()
