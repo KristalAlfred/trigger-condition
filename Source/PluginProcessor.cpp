@@ -22,15 +22,15 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
                        ),
 #endif
     parameters(*this, nullptr, juce::Identifier("TriggerCondition"), {
-        std::make_unique<juce::AudioParameterBool>("probabilityMode",
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"probabilityMode", 1},
                                                    "Filter based on chance",
                                                    false),
-        std::make_unique<juce::AudioParameterInt>("probability",
+        std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"probability", 1},
                                                   "Probability for notes to go through",
                                                   0,
                                                   100,
                                                   10),
-        std::make_unique<juce::AudioParameterInt>("allowedMessageFrequency",
+        std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"allowedMessageFrequency", 1},
                                                   "One i X messages go through",
                                                   1,
                                                   1000,
