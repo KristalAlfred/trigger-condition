@@ -154,7 +154,7 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     jassert(buffer.getNumChannels() == 0);
     
     /* Here we want to check for MIDI messages to stop. We only want to
-     stop note on/off events since it isn't desirable to halt pitch wheel changes
+     stop note on events since it isn't desirable to halt pitch wheel changes
      and stuff like that. Also, for every note on we catch, we should catch a corresponding
      note off (This is probably good practice, but necessary?). There are two modes, chance
      based gating (only X% of notes make it through) and periodic gating (every X notes
