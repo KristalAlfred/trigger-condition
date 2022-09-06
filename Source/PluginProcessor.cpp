@@ -163,21 +163,21 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     for (const auto metadata : midiMessages) {
         const auto message { metadata.getMessage() };
         
-        // We only manipulate note-on messages right now.
-        if (!message.isNoteOn()) continue;
-
-        if (juce::roundToInt(chanceModeParameter->load())) {
-            if (randomNumber() > juce::roundToInt(percentageParameter->load())) continue;
-            filteredMidi.addEvent(message, metadata.samplePosition);
-        } else {
-            ++filteredNotes;
-            if (filteredNotes < 4 /* juce::roundToInt(allowedMessageFrequencyParameter->load()) */) {
-                continue;
+        // We only want to intercept the message if it's a note-on
+        if (message.isNoteOn()) {
+            
+            if (juce::roundToInt(chanceModeParameter->load())) {
+                if (randomNumber() > juce::roundToInt(percentageParameter->load())) continue;
             } else {
-                filteredMidi.addEvent(message, metadata.samplePosition);
-                filteredNotes = 0;
+                ++filteredNotes;
+                if (filteredNotes < juce::roundToInt(allowedMessageFrequencyParameter->load())) {
+                    continue;
+                } else {
+                    filteredNotes = 0;
+                }
             }
         }
+        filteredMidi.addEvent(message, metadata.samplePosition);
     }
     midiMessages.swapWith(filteredMidi);
 }
