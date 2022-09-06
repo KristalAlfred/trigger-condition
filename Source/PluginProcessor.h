@@ -60,9 +60,11 @@ public:
 private:
     int messageCount { 0 };
     
-    juce::AudioParameterBool* chanceMode;
-    juce::AudioParameterInt* percentage;
-    juce::AudioParameterInt* allowedMessageFrequency;
+    juce::AudioProcessorValueTreeState parameters;
+    
+    std::atomic<bool>* chanceMode { nullptr };
+    std::atomic<int>* percentage { nullptr };
+    std::atomic<int>* allowedMessageFrequency { nullptr };
     int filteredNotes;
     
     std::default_random_engine generator;

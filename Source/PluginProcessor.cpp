@@ -21,12 +21,24 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
                      #endif
                        ),
 #endif
+    parameters(*this, nullptr, juce::Identifier("TriggerCondition"), {
+        std::make_unique<juce::AudioParameterBool>("chanceMode",
+                                                   "Filter based on chance",
+                                                   false),
+        std::make_unique<juce::AudioParameterInt>("percentage",
+                                                  "Chance for notes to go through",
+                                                  0,
+                                                  100,
+                                                  10),
+        std::make_unique<juce::AudioParameterInt>("allowedMessageFrequency",
+                                                  "One i X messages go through",
+                                                  1,
+                                                  1000,
+                                                  4)
+    }),
     filteredNotes(0),
     distribution(0, 100)
 {
-    addParameter((chanceMode = new juce::AudioParameterBool(juce::ParameterID { "chanceMode", 1 }, "Filter based on chance", false)));
-    addParameter((percentage = new juce::AudioParameterInt(juce::ParameterID { "percentage", 1 }, "Chance for notes to go through", 0, 100, 10)));
-    addParameter((allowedMessageFrequency = new juce::AudioParameterInt(juce::ParameterID { "allowedMessageFrequency", 1 }, "One in X messages go through", 1, 1000, 4)));
 }
 
 TriggerConditionAudioProcessor::~TriggerConditionAudioProcessor()
@@ -98,8 +110,7 @@ void TriggerConditionAudioProcessor::changeProgramName (int index, const juce::S
 //==============================================================================
 void TriggerConditionAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    
 }
 
 void TriggerConditionAudioProcessor::releaseResources()
@@ -153,20 +164,20 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         const auto message { metadata.getMessage() };
         
         // We only manipulate note-on messages right now.
-        if (!message.isNoteOn()) continue;
-        
-        if (chanceMode->get()) {
-            if (randomNumber() > percentage->get()) continue;
-            filteredMidi.addEvent(message, metadata.samplePosition);
-        } else {
-            ++filteredNotes;
-            if (filteredNotes < allowedMessageFrequency->get()) {
-                continue;
-            } else {
-                filteredMidi.addEvent(message, metadata.samplePosition);
-                filteredNotes = 0;
-            }
-        }
+//        if (!message.isNoteOn()) continue;
+//
+//        if (chanceMode->get()) {
+//            if (randomNumber() > percentage->get()) continue;
+//            filteredMidi.addEvent(message, metadata.samplePosition);
+//        } else {
+//            ++filteredNotes;
+//            if (filteredNotes < allowedMessageFrequency->get()) {
+//                continue;
+//            } else {
+//                filteredMidi.addEvent(message, metadata.samplePosition);
+//                filteredNotes = 0;
+//            }
+//        }
     }
     midiMessages.swapWith(filteredMidi);
 }
@@ -179,7 +190,7 @@ bool TriggerConditionAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* TriggerConditionAudioProcessor::createEditor()
 {
-    return new TriggerConditionAudioProcessorEditor (*this);
+    return new TriggerConditionAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
