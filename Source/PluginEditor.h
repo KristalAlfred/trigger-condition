@@ -26,9 +26,9 @@ public:
 
 private:
     juce::AudioProcessorValueTreeState& aptvs;
-    juce::ToggleButton chanceModeButton;
+    juce::ToggleButton probabilityModeButton;
     juce::Slider frequencySlider;
-    juce::Slider chanceSlider;
+    juce::Slider probabilitySlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> chanceButtonAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencySliderAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> chanceSliderAttachment;

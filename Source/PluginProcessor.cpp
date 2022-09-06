@@ -22,11 +22,11 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
                        ),
 #endif
     parameters(*this, nullptr, juce::Identifier("TriggerCondition"), {
-        std::make_unique<juce::AudioParameterBool>("chanceMode",
+        std::make_unique<juce::AudioParameterBool>("probabilityMode",
                                                    "Filter based on chance",
                                                    false),
-        std::make_unique<juce::AudioParameterInt>("percentage",
-                                                  "Chance for notes to go through",
+        std::make_unique<juce::AudioParameterInt>("probability",
+                                                  "Probability for notes to go through",
                                                   0,
                                                   100,
                                                   10),
@@ -39,8 +39,8 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
     filteredNotes(0),
     distribution(0, 100)
 {
-    chanceModeParameter = parameters.getRawParameterValue ("chanceMode");
-    percentageParameter  = parameters.getRawParameterValue ("percentage");
+    probabilityModeParameter = parameters.getRawParameterValue ("probabilityMode");
+    probabilityParameter  = parameters.getRawParameterValue ("probability");
     allowedMessageFrequencyParameter = parameters.getRawParameterValue("allowedMessageFrequency");
 }
 
@@ -156,8 +156,9 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     /* Here we want to check for MIDI messages to stop. We only want to
      stop note on/off events since it isn't desirable to halt pitch wheel changes
      and stuff like that. Also, for every note on we catch, we should catch a corresponding
-     note off (This is probably good practice, but necessary?). There are two modes, chance based gating (only X% of notes make it through) and
-     periodic gating (every X notes make it through).
+     note off (This is probably good practice, but necessary?). There are two modes, chance
+     based gating (only X% of notes make it through) and periodic gating (every X notes
+     make it through).
      */
     juce::MidiBuffer filteredMidi;
     for (const auto metadata : midiMessages) {
@@ -166,11 +167,10 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         // We only want to intercept the message if it's a note-on
         if (message.isNoteOn()) {
             
-            if (juce::roundToInt(chanceModeParameter->load())) {
-                if (randomNumber() > juce::roundToInt(percentageParameter->load())) continue;
+            if (juce::roundToInt(probabilityModeParameter->load())) {
+                if (randomNumber() > juce::roundToInt(probabilityParameter->load())) continue;
             } else {
-                ++filteredNotes;
-                if (filteredNotes < juce::roundToInt(allowedMessageFrequencyParameter->load())) {
+                if (++filteredNotes < juce::roundToInt(allowedMessageFrequencyParameter->load())) {
                     continue;
                 } else {
                     filteredNotes = 0;
