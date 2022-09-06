@@ -63,6 +63,7 @@ private:
     juce::AudioParameterBool* chanceMode;
     juce::AudioParameterInt* percentage;
     juce::AudioParameterInt* allowedMessageFrequency;
+    juce::HashMap<int, int> filteredNotes;
     
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;

@@ -23,9 +23,9 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
 #endif
     distribution(0, 100)
 {
-    addParameter((chanceMode = new juce::AudioParameterBool(juce::ParameterID { "chanceMode", 1 }, "Filter based on chance", true)));
+    addParameter((chanceMode = new juce::AudioParameterBool(juce::ParameterID { "chanceMode", 1 }, "Filter based on chance", false)));
     addParameter((percentage = new juce::AudioParameterInt(juce::ParameterID { "percentage", 1 }, "Chance for notes to go through", 0, 100, 10)));
-    addParameter((allowedMessageFrequency = new juce::AudioParameterInt(juce::ParameterID { "allowedMessageFrequency", 1 }, "One in X messages go through", 1, 1000, 1)));
+    addParameter((allowedMessageFrequency = new juce::AudioParameterInt(juce::ParameterID { "allowedMessageFrequency", 1 }, "One in X messages go through", 1, 1000, 4)));
 }
 
 TriggerConditionAudioProcessor::~TriggerConditionAudioProcessor()
@@ -144,19 +144,30 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     /* Here we want to check for MIDI messages to stop. We only want to
      stop note on/off events since it isn't desirable to halt pitch wheel changes
      and stuff like that. Also, for every note on we catch, we should catch a corresponding
-     note off. There are two modes, chance based gating (only X% of notes make it through) and
+     note off (This is probably good practice, but necessary?). There are two modes, chance based gating (only X% of notes make it through) and
      periodic gating (every X notes make it through).
      */
-    
     juce::MidiBuffer filteredMidi;
     for (const auto metadata : midiMessages) {
         const auto message { metadata.getMessage() };
         
+        // We only manipulate note-on messages right now.
+        if (!message.isNoteOn()) continue;
+        
+        const auto noteNo { message.getNoteNumber() };
+        
         if (chanceMode->get()) {
-            if (message.isNoteOn() && randomNumber() > percentage->get()) continue;
+            if (randomNumber() > percentage->get()) continue;
             filteredMidi.addEvent(message, metadata.samplePosition);
         } else {
-            // TODO: Implement :)
+            if (filteredNotes.contains(noteNo)) {
+                if (filteredNotes[noteNo] < allowedMessageFrequency->get()) {
+                    filteredNotes.set(noteNo, filteredNotes[noteNo] + 1);
+                    continue;
+                }
+                filteredNotes.remove(noteNo);
+                filteredMidi.addEvent(message, metadata.samplePosition);
+            }
         }
     }
     midiMessages.swapWith(filteredMidi);
