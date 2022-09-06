@@ -39,6 +39,9 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
     filteredNotes(0),
     distribution(0, 100)
 {
+    chanceModeParameter = parameters.getRawParameterValue ("chanceMode");
+    percentageParameter  = parameters.getRawParameterValue ("percentage");
+    allowedMessageFrequencyParameter = parameters.getRawParameterValue("allowedMessageFrequency");
 }
 
 TriggerConditionAudioProcessor::~TriggerConditionAudioProcessor()
@@ -115,9 +118,6 @@ void TriggerConditionAudioProcessor::prepareToPlay (double sampleRate, int sampl
 
 void TriggerConditionAudioProcessor::releaseResources()
 {
-    jassert(chanceMode != nullptr);
-    jassert(percentage != nullptr);
-    jassert(allowedMessageFrequency != nullptr);
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -164,20 +164,20 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         const auto message { metadata.getMessage() };
         
         // We only manipulate note-on messages right now.
-//        if (!message.isNoteOn()) continue;
-//
-//        if (chanceMode->get()) {
-//            if (randomNumber() > percentage->get()) continue;
-//            filteredMidi.addEvent(message, metadata.samplePosition);
-//        } else {
-//            ++filteredNotes;
-//            if (filteredNotes < allowedMessageFrequency->get()) {
-//                continue;
-//            } else {
-//                filteredMidi.addEvent(message, metadata.samplePosition);
-//                filteredNotes = 0;
-//            }
-//        }
+        if (!message.isNoteOn()) continue;
+
+        if (juce::roundToInt(chanceModeParameter->load())) {
+            if (randomNumber() > juce::roundToInt(percentageParameter->load())) continue;
+            filteredMidi.addEvent(message, metadata.samplePosition);
+        } else {
+            ++filteredNotes;
+            if (filteredNotes < 4 /* juce::roundToInt(allowedMessageFrequencyParameter->load()) */) {
+                continue;
+            } else {
+                filteredMidi.addEvent(message, metadata.samplePosition);
+                filteredNotes = 0;
+            }
+        }
     }
     midiMessages.swapWith(filteredMidi);
 }
