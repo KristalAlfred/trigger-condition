@@ -21,6 +21,7 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
                      #endif
                        ),
 #endif
+    filteredNotes(0),
     distribution(0, 100)
 {
     addParameter((chanceMode = new juce::AudioParameterBool(juce::ParameterID { "chanceMode", 1 }, "Filter based on chance", false)));
@@ -154,19 +155,16 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         // We only manipulate note-on messages right now.
         if (!message.isNoteOn()) continue;
         
-        const auto noteNo { message.getNoteNumber() };
-        
         if (chanceMode->get()) {
             if (randomNumber() > percentage->get()) continue;
             filteredMidi.addEvent(message, metadata.samplePosition);
         } else {
-            if (filteredNotes.contains(noteNo)) {
-                if (filteredNotes[noteNo] < allowedMessageFrequency->get()) {
-                    filteredNotes.set(noteNo, filteredNotes[noteNo] + 1);
-                    continue;
-                }
-                filteredNotes.remove(noteNo);
+            ++filteredNotes;
+            if (filteredNotes < allowedMessageFrequency->get()) {
+                continue;
+            } else {
                 filteredMidi.addEvent(message, metadata.samplePosition);
+                filteredNotes = 0;
             }
         }
     }
