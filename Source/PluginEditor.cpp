@@ -15,12 +15,15 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
 {
     
     frequencySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    
-    frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "allowedMessageFrequency", frequencySlider));
+    chanceSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     chanceButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(aptvs, "chanceMode", chanceModeButton));
+    frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "allowedMessageFrequency", frequencySlider));
+    chanceSliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "percentage", chanceSlider));
     
-    addAndMakeVisible(&frequencySlider);
     addAndMakeVisible(&chanceModeButton);
+    addAndMakeVisible(&frequencySlider);
+    addAndMakeVisible(&chanceSlider);
+    
     setSize (400, 300);
 }
 
@@ -38,6 +41,7 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
     g.setFont (15.0f);
     frequencySlider.setBounds(50, 50, getWidth() / 5, getHeight() / 5);
     chanceModeButton.setBounds(200, 50, getWidth() / 5, getHeight() / 5);
+    chanceSlider.setBounds(300, 50, getWidth() / 5, getHeight() / 5);
 }
 
 void TriggerConditionAudioProcessorEditor::resized()

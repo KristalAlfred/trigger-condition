@@ -28,8 +28,10 @@ private:
     juce::AudioProcessorValueTreeState& aptvs;
     juce::ToggleButton chanceModeButton;
     juce::Slider frequencySlider;
+    juce::Slider chanceSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> chanceButtonAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencySliderAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> chanceSliderAttachment;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     TriggerConditionAudioProcessor& audioProcessor;
