@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "TrigCondLookAndFeel.h"
 
 //==============================================================================
 /**
@@ -25,6 +26,7 @@ public:
     void resized() override;
 
 private:
+    TrigCondLookAndFeel customLnF;
     juce::AudioProcessorValueTreeState& aptvs;
     juce::ToggleButton probabilityModeButton;
     juce::Slider frequencySlider;

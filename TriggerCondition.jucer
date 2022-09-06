@@ -4,6 +4,10 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsMidiEffectPlugin">
   <MAINGROUP id="A5215k" name="TriggerCondition">
     <GROUP id="{1BC8CD3F-3D42-4C50-53E1-21C830523C71}" name="Source">
+      <FILE id="EQDSNB" name="TrigCondLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/TrigCondLookAndFeel.cpp"/>
+      <FILE id="teWNBD" name="TrigCondLookAndFeel.h" compile="0" resource="0"
+            file="Source/TrigCondLookAndFeel.h"/>
       <FILE id="ISfmt7" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="YOxDeo" name="PluginProcessor.h" compile="0" resource="0"

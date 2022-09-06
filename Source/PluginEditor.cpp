@@ -16,9 +16,14 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     
     frequencySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     probabilitySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    
     chanceButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(aptvs, "probabilityMode", probabilityModeButton));
     frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "allowedMessageFrequency", frequencySlider));
     chanceSliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "probability", probabilitySlider));
+    
+    probabilitySlider.setLookAndFeel(&customLnF);
+    frequencySlider.setLookAndFeel(&customLnF);
+    probabilityModeButton.setLookAndFeel(&customLnF);
     
     addAndMakeVisible(&probabilityModeButton);
     addAndMakeVisible(&frequencySlider);
