@@ -47,9 +47,21 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    frequencySlider.setBounds(50, 50, 100, 100);
-    probabilityModeButton.setBounds(150, 50, 100, 100);
-    probabilitySlider.setBounds(200, 50, 100, 100);
+    
+    auto sliderWidth { 150 };
+    auto sliderHeight { 150 };
+    frequencySlider.setBounds(getWidth() / 2 - sliderWidth / 2,
+                              getHeight() / 2 - sliderHeight / 2,
+                              sliderWidth,
+                              sliderHeight);
+    
+    // TODO: Improve the buttons placing when rendering is fixed!
+    probabilityModeButton.setBounds(getWidth() / 2, 3 * getHeight() / 6, 100, 100);
+    
+    probabilitySlider.setBounds(getWidth() / 2 - sliderWidth / 2,
+                                getHeight() / 2 - sliderHeight / 2,
+                                sliderWidth,
+                                sliderHeight);
 }
 
 void TriggerConditionAudioProcessorEditor::resized()
