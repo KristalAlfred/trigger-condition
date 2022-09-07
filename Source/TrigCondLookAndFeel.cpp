@@ -48,5 +48,7 @@ void TrigCondLookAndFeel::drawRotarySlider (juce::Graphics& g,
 void TrigCondLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& label)
 {
     g.setColour(juce::Colours::white);
-    g.drawText(label.getText(), 0, 0, label.getWidth(), label.getHeight(), juce::Justification::centred);
+    g.drawText(label.getText(), 0, 0,
+               label.getWidth(), label.getHeight(),
+               juce::Justification::centred);
 }
