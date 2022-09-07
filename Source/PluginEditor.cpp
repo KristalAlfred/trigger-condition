@@ -43,6 +43,10 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     
     addAndMakeVisible(&probabilityModeButton);
     
+    header.setText("TriggerCondition", juce::NotificationType::dontSendNotification);
+    header.setFont(juce::Font("Avenir", 20.f, juce::Font::FontStyleFlags::bold));
+    addAndMakeVisible(&header);
+    
     setSize (400, 300);
 }
 
@@ -59,26 +63,34 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
     
+    auto width { getWidth() };
+    auto halfWidth { width / 2 };
+    auto height { getHeight() };
+    auto halfHeight { height / 2 };
+    
     auto sliderWidth { 150 };
     auto sliderHeight { 150 };
-    frequencySlider.setBounds(getWidth() / 2 - sliderWidth / 2,
-                              getHeight() / 2 - sliderHeight / 2,
+    frequencySlider.setBounds(halfWidth - sliderWidth / 2,
+                              halfHeight - sliderHeight / 2,
                               sliderWidth,
                               sliderHeight);
     
-    // TODO: Improve the buttons placing when rendering is fixed!
-    
     auto buttonWidth { 60 };
     auto buttonHeight { 30 };
-    probabilityModeButton.setBounds(getWidth() / 2 - buttonWidth / 2,
+    probabilityModeButton.setBounds(halfWidth - buttonWidth / 2,
                                     (7 * getHeight() / 8) - buttonHeight / 2,
                                     buttonWidth,
                                     buttonHeight);
     
-    probabilitySlider.setBounds(getWidth() / 2 - sliderWidth / 2,
-                                getHeight() / 2 - sliderHeight / 2,
+    probabilitySlider.setBounds(halfWidth - sliderWidth / 2,
+                                halfHeight - sliderHeight / 2,
                                 sliderWidth,
                                 sliderHeight);
+    
+    auto headerWidth { 200 };
+    auto headerHeight { 20 };
+    header.setBounds(10, 10, headerWidth, headerHeight);
+    
 }
 
 void TriggerConditionAudioProcessorEditor::resized()
