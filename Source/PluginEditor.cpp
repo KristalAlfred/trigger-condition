@@ -32,9 +32,11 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
         if (probabilityModeButton.getToggleState()) {
             this->addAndMakeVisible(&probabilitySlider);
             this->removeChildComponent(&frequencySlider);
+            this->sliderTitle.setText("Probability", juce::dontSendNotification);
         } else {
             this->addAndMakeVisible(&frequencySlider);
             this->removeChildComponent(&probabilitySlider);
+            this->sliderTitle.setText("Periodic", juce::dontSendNotification);
         }
     };
     
@@ -43,9 +45,26 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     
     addAndMakeVisible(&probabilityModeButton);
     
+    
     header.setText("TriggerCondition", juce::NotificationType::dontSendNotification);
     header.setFont(juce::Font("Avenir", 20.f, juce::Font::FontStyleFlags::bold));
+    header.setEditable(false);
     addAndMakeVisible(&header);
+    
+    
+    sliderTitle.setText(probabilityModeButton.getToggleState() ? "Probability" : "Periodic", juce::dontSendNotification);
+    sliderTitle.setFont(juce::Font("Avenir", 20.f, 0));
+    sliderTitle.setJustificationType(juce::Justification::centred);
+    sliderTitle.setEditable(false);
+    addAndMakeVisible(&sliderTitle);
+    
+    
+    probabilityModeLabel.setText("Probability mode", juce::dontSendNotification);
+    probabilityModeLabel.setFont(juce::Font("Avenir", 16, 0));
+    probabilityModeLabel.setJustificationType(juce::Justification::centred);
+    probabilityModeLabel.setEditable(false);
+    addAndMakeVisible(&probabilityModeLabel);
+    
     
     setSize (400, 300);
 }
@@ -91,6 +110,9 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
     auto headerHeight { 20 };
     header.setBounds(10, 10, headerWidth, headerHeight);
     
+    sliderTitle.setBounds(halfWidth - headerWidth / 2, 50, headerWidth, headerHeight);
+    
+    probabilityModeLabel.setBounds(halfWidth - headerWidth / 2, height * 0.93, headerWidth, headerHeight);
 }
 
 void TriggerConditionAudioProcessorEditor::resized()

@@ -32,6 +32,8 @@ private:
     juce::Slider frequencySlider;
     juce::Slider probabilitySlider;
     juce::Label header;
+    juce::Label sliderTitle;
+    juce::Label probabilityModeLabel;
     
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> probabilityButtonAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencySliderAttachment;
