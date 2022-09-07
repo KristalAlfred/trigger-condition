@@ -47,9 +47,9 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    frequencySlider.setBounds(50, 50, 150, 150);
-    probabilityModeButton.setBounds(200, 50, 150, 150);
-    probabilitySlider.setBounds(300, 50, 150, 150);
+    frequencySlider.setBounds(50, 50, 100, 100);
+    probabilityModeButton.setBounds(150, 50, 100, 100);
+    probabilitySlider.setBounds(200, 50, 100, 100);
 }
 
 void TriggerConditionAudioProcessorEditor::resized()

@@ -25,11 +25,21 @@ void TrigCondLookAndFeel::drawRotarySlider (juce::Graphics& g,
     auto rw { radius * 2.0f };
     auto angle { rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle) };
     
-    g.setColour(juce::Colours::green);
-    g.fillEllipse(rx, ry, rw, rw);
+    juce::Path path;
+    path.addEllipse(rx, ry, rw, rw);
+    
+    juce::DropShadow shadow {
+        juce::Colour((uint8_t) 0, (uint8_t) 0, (uint8_t) 0, (uint8_t) 60),
+        10,
+        juce::Point<int>{ 0, 5 }};
+    shadow.drawForPath(g, path);
+    
+    g.setColour(juce::Colours::darkgrey);
+    g.fillPath(path);
     
     g.setColour(juce::Colours::black);
-    g.drawLine(centreX, centreY,
+    g.drawLine(centreX + (radius / 2) * cos(angle - juce::MathConstants<float>::halfPi),
+               centreY + (radius / 2) * sin(angle - juce::MathConstants<float>::halfPi),
                centreX + radius * cos(angle - juce::MathConstants<float>::halfPi),
                centreY + radius * sin(angle - juce::MathConstants<float>::halfPi),
                5.f);
@@ -37,5 +47,4 @@ void TrigCondLookAndFeel::drawRotarySlider (juce::Graphics& g,
 
 void TrigCondLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& label)
 {
-    
 }
