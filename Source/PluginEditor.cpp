@@ -28,9 +28,20 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     frequencySlider.setLookAndFeel(&customLnF);
     probabilityModeButton.setLookAndFeel(&customLnF);
     
+    probabilityModeButton.onClick = [this] () {
+        if (probabilityModeButton.getToggleState()) {
+            this->addAndMakeVisible(&probabilitySlider);
+            this->removeChildComponent(&frequencySlider);
+        } else {
+            this->addAndMakeVisible(&frequencySlider);
+            this->removeChildComponent(&probabilitySlider);
+        }
+    };
+    
+    if (probabilityModeButton.getToggleState()) addAndMakeVisible(&probabilitySlider);
+    else                                        addAndMakeVisible(&frequencySlider);
+    
     addAndMakeVisible(&probabilityModeButton);
-    addAndMakeVisible(&frequencySlider);
-    addAndMakeVisible(&probabilitySlider);
     
     setSize (400, 300);
 }
