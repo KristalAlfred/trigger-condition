@@ -17,4 +17,6 @@ public:
     virtual void drawRotarySlider (juce::Graphics &, int x, int y, int width, int height, float sliderPosProportional, float rotaryStartAngle, float rotaryEndAngle, juce::Slider &) override;
     
     virtual void drawLabel (juce::Graphics&, juce::Label&) override;
+    
+    virtual void drawToggleButton (juce::Graphics &, juce::ToggleButton &, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
 };

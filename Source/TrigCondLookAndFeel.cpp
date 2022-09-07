@@ -52,3 +52,30 @@ void TrigCondLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& label)
                label.getWidth(), label.getHeight(),
                juce::Justification::centred);
 }
+
+
+void TrigCondLookAndFeel::drawToggleButton (juce::Graphics& g,
+                                            juce::ToggleButton& button,
+                                            bool shouldDrawButtonAsHighlighted,
+                                            bool shouldDrawButtonAsDown)
+{
+//    g.setColour(juce::Colours::green);
+//    g.fillRect(button.getX(), button.getY(), button.getWidth(), button.getHeight());
+    
+    auto inset { 10 };
+    
+    juce::Rectangle<int> background { button.getWidth() - inset,
+        button.getHeight() - inset};
+    
+    juce::Colour backgroundColor { (uint8_t) 150, (uint8_t) 150, (uint8_t) 150, (uint8_t) 255 };
+    
+    juce::DropShadow outlineShadow { juce::Colour{ (uint8_t) 0, 0, 0, (uint8_t) 100 },
+        3,
+        juce::Point<int>{ 2, 2 }
+    };
+    outlineShadow.drawForRectangle(g, background);
+    
+    g.setColour(backgroundColor);
+    g.fillRect(background);
+    
+}
