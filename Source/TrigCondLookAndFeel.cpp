@@ -59,15 +59,17 @@ void TrigCondLookAndFeel::drawToggleButton (juce::Graphics& g,
                                             bool shouldDrawButtonAsHighlighted,
                                             bool shouldDrawButtonAsDown)
 {
-//    g.setColour(juce::Colours::green);
-//    g.fillRect(button.getX(), button.getY(), button.getWidth(), button.getHeight());
-    
     auto inset { 10 };
     
-    juce::Rectangle<int> background { button.getWidth() - inset,
-        button.getHeight() - inset};
+    juce::Rectangle<int> background { inset / 2, inset / 2,
+                                    button.getWidth() - inset,
+                                    button.getHeight() - inset
+    };
     
-    juce::Colour backgroundColor { (uint8_t) 150, (uint8_t) 150, (uint8_t) 150, (uint8_t) 255 };
+    juce::Colour backgroundColor { button.getToggleState() ?
+            juce::Colour{(uint8_t) 30, (uint8_t) 210, (uint8_t) 67, (uint8_t) 255}
+        :   juce::Colour{(uint8_t) 150, (uint8_t) 150, (uint8_t) 150, (uint8_t) 255}
+    };
     
     juce::DropShadow outlineShadow { juce::Colour{ (uint8_t) 0, 0, 0, (uint8_t) 100 },
         3,
@@ -78,4 +80,12 @@ void TrigCondLookAndFeel::drawToggleButton (juce::Graphics& g,
     g.setColour(backgroundColor);
     g.fillRect(background);
     
+    
+    juce::Colour textColour { (uint8_t) 0, (uint8_t) 0, (uint8_t) 0, (uint8_t) 255 };
+    const std::string buttonText { button.getToggleState() ? "ON" : "OFF" };
+    
+    g.setColour(textColour);
+    g.drawText(buttonText, inset / 2, inset / 2,
+               button.getWidth() - inset,
+               button.getHeight() - inset, juce::Justification::centred);
 }
