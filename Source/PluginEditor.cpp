@@ -67,7 +67,13 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
                               sliderHeight);
     
     // TODO: Improve the buttons placing when rendering is fixed!
-    probabilityModeButton.setBounds(getWidth() / 2, 3 * getHeight() / 6, 100, 100);
+    
+    auto buttonWidth { 60 };
+    auto buttonHeight { 30 };
+    probabilityModeButton.setBounds(getWidth() / 2 - buttonWidth / 2,
+                                    (7 * getHeight() / 8) - buttonHeight / 2,
+                                    buttonWidth,
+                                    buttonHeight);
     
     probabilitySlider.setBounds(getWidth() / 2 - sliderWidth / 2,
                                 getHeight() / 2 - sliderHeight / 2,
