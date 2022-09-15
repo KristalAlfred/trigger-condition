@@ -34,7 +34,7 @@ void TrigCondLookAndFeel::drawRotarySlider (juce::Graphics& g,
         juce::Point<int>{ 0, 5 }};
     shadow.drawForPath(g, path);
     
-    g.setColour(juce::Colours::darkgrey);
+    g.setColour(juce::Colour(255, 245, 230));
     g.fillPath(path);
     
     g.setColour(juce::Colours::black);
