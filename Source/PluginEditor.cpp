@@ -20,15 +20,16 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
     probabilitySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
     
-    probabilityButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(aptvs, "probabilityMode", probabilityModeButton));
     frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "frequency", frequencySlider));
-    probabilitySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "probability", probabilitySlider));
+    // Remove these when single slider solution is working
+    probabilityButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(aptvs, "probabilityMode", probabilityModeButton));
+    probabilitySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "allowedMessageFrequency", probabilitySlider));
     
-    frequencySlider.setSkewFactorFromMidPoint(100);
     frequencySlider.textFromValueFunction = [this] (double value) {
         if (value <= 100) return std::to_string(value);
-        return choices[value-100].toStdString();
+        return choices[value-101].toStdString();
     };
+    
     
     probabilitySlider.setLookAndFeel(&customLnF);
     frequencySlider.setLookAndFeel(&customLnF);

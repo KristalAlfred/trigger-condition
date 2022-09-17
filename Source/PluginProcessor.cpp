@@ -25,10 +25,9 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
         std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"probabilityMode", 1},
                                                    "Filter based on chance",
                                                    false),
-        std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"frequency", 1},
+        std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"frequency", 1},
                                                   "Control for which notes to go through",
-                                                  0,
-                                                  180,
+                                                  juce::NormalisableRange<float>(0, 180, 1, 1.2),
                                                   100),
         std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"allowedMessageFrequency", 1},
                                                   "Ratio of accepted messages",
@@ -40,7 +39,7 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
     distribution(0, 100)
 {
     probabilityModeParameter = parameters.getRawParameterValue ("probabilityMode");
-    probabilityParameter  = parameters.getRawParameterValue ("probability");
+    probabilityParameter  = parameters.getRawParameterValue ("frequency");
     allowedMessageFrequencyParameter = parameters.getRawParameterValue("allowedMessageFrequency");
 }
 
