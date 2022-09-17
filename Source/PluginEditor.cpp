@@ -21,8 +21,14 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     probabilitySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
     
     probabilityButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(aptvs, "probabilityMode", probabilityModeButton));
-    frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "allowedMessageFrequency", frequencySlider));
+    frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "frequency", frequencySlider));
     probabilitySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "probability", probabilitySlider));
+    
+    frequencySlider.setSkewFactorFromMidPoint(100);
+    frequencySlider.textFromValueFunction = [this] (double value) {
+        if (value <= 100) return std::to_string(value);
+        return choices[value-100].toStdString();
+    };
     
     probabilitySlider.setLookAndFeel(&customLnF);
     frequencySlider.setLookAndFeel(&customLnF);
@@ -64,7 +70,7 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     probabilityModeLabel.setJustificationType(juce::Justification::centred);
     probabilityModeLabel.setEditable(false);
     addAndMakeVisible(&probabilityModeLabel);
-    
+
     
     setSize (400, 300);
 }
