@@ -16,12 +16,15 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     
     frequencySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
-    frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "frequency", frequencySlider));
     
+    frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "frequency", frequencySlider));
     frequencySlider.textFromValueFunction = [this] (double value) {
-        if (value <= 100) return std::to_string(value);
-        return choices[value-101].toStdString();
+        if (value <= 100) return juce::String(value) + "%";
+        return choices[value-101];
     };
+    
+    // The initial value isn't generated using the lambda above for some reason, so this line is used to display the correct text.
+    frequencySlider.setTextValueSuffix(" ");
     
     frequencySlider.setLookAndFeel(&customLnF);
     
@@ -62,8 +65,8 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
     
     auto sliderWidth { 150 };
     auto sliderHeight { 150 };
-    frequencySlider.setBounds(halfWidth - sliderWidth / 2,
-                              halfHeight - sliderHeight / 2,
+    frequencySlider.setBounds(halfWidth - (sliderWidth / 2),
+                              halfHeight - (sliderHeight / 2),
                               sliderWidth,
                               sliderHeight);
 
