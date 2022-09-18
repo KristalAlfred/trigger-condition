@@ -15,43 +15,17 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
 {
     
     frequencySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    probabilitySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    
     frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
-    probabilitySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
-    
     frequencySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "frequency", frequencySlider));
-    // Remove these when single slider solution is working
-    probabilityButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(aptvs, "probabilityMode", probabilityModeButton));
-    probabilitySliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(aptvs, "allowedMessageFrequency", probabilitySlider));
     
     frequencySlider.textFromValueFunction = [this] (double value) {
         if (value <= 100) return std::to_string(value);
         return choices[value-101].toStdString();
     };
     
-    
-    probabilitySlider.setLookAndFeel(&customLnF);
     frequencySlider.setLookAndFeel(&customLnF);
-    probabilityModeButton.setLookAndFeel(&customLnF);
     
-    probabilityModeButton.onClick = [this] () {
-        if (probabilityModeButton.getToggleState()) {
-            this->addAndMakeVisible(&probabilitySlider);
-            this->removeChildComponent(&frequencySlider);
-            this->sliderTitle.setText("Probability", juce::dontSendNotification);
-        } else {
-            this->addAndMakeVisible(&frequencySlider);
-            this->removeChildComponent(&probabilitySlider);
-            this->sliderTitle.setText("Periodic", juce::dontSendNotification);
-        }
-    };
-    
-    if (probabilityModeButton.getToggleState()) addAndMakeVisible(&probabilitySlider);
-    else                                        addAndMakeVisible(&frequencySlider);
-    
-    addAndMakeVisible(&probabilityModeButton);
-    
+    addAndMakeVisible(&frequencySlider);
     
     header.setText("TriggerCondition", juce::NotificationType::dontSendNotification);
     header.setFont(juce::Font("Avenir", 20.f, juce::Font::FontStyleFlags::bold));
@@ -59,19 +33,11 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     addAndMakeVisible(&header);
     
     
-    sliderTitle.setText(probabilityModeButton.getToggleState() ? "Probability" : "Periodic", juce::dontSendNotification);
+    sliderTitle.setText("Probability", juce::dontSendNotification);
     sliderTitle.setFont(juce::Font("Avenir", 20.f, 0));
     sliderTitle.setJustificationType(juce::Justification::centred);
     sliderTitle.setEditable(false);
     addAndMakeVisible(&sliderTitle);
-    
-    
-    probabilityModeLabel.setText("Probability mode", juce::dontSendNotification);
-    probabilityModeLabel.setFont(juce::Font("Avenir", 16, 0));
-    probabilityModeLabel.setJustificationType(juce::Justification::centred);
-    probabilityModeLabel.setEditable(false);
-    addAndMakeVisible(&probabilityModeLabel);
-
     
     setSize (400, 300);
 }
@@ -100,26 +66,12 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
                               halfHeight - sliderHeight / 2,
                               sliderWidth,
                               sliderHeight);
-    
-    auto buttonWidth { 60 };
-    auto buttonHeight { 30 };
-    probabilityModeButton.setBounds(halfWidth - buttonWidth / 2,
-                                    (7 * getHeight() / 8) - buttonHeight / 2,
-                                    buttonWidth,
-                                    buttonHeight);
-    
-    probabilitySlider.setBounds(halfWidth - sliderWidth / 2,
-                                halfHeight - sliderHeight / 2,
-                                sliderWidth,
-                                sliderHeight);
-    
+
     auto headerWidth { 200 };
     auto headerHeight { 20 };
     header.setBounds(10, 10, headerWidth, headerHeight);
     
     sliderTitle.setBounds(halfWidth - headerWidth / 2, 50, headerWidth, headerHeight);
-    
-    probabilityModeLabel.setBounds(halfWidth - headerWidth / 2, height * 0.93, headerWidth, headerHeight);
 }
 
 void TriggerConditionAudioProcessorEditor::resized()
