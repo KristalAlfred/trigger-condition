@@ -62,9 +62,7 @@ private:
     
     juce::AudioProcessorValueTreeState parameters;
     
-    std::atomic<float>* probabilityModeParameter { nullptr };
-    std::atomic<float>* probabilityParameter { nullptr };
-    std::atomic<float>* allowedMessageFrequencyParameter { nullptr };
+    std::atomic<float>* frequencyParameter { nullptr };
     int filteredNotes;
     
     std::default_random_engine generator;
