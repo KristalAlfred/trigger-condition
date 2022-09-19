@@ -1,4 +1,4 @@
-# trigger-condition
+# Trigger Condition
 
 A small, simple MIDI plugin which filters note-on messages based on probability or in a periodic fashion!
 
