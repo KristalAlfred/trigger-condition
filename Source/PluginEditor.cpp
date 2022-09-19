@@ -36,7 +36,7 @@ TriggerConditionAudioProcessorEditor::TriggerConditionAudioProcessorEditor (Trig
     addAndMakeVisible(&header);
     
     
-    sliderTitle.setText("Probability", juce::dontSendNotification);
+    sliderTitle.setText("Condition", juce::dontSendNotification);
     sliderTitle.setFont(juce::Font("Avenir", 20.f, 0));
     sliderTitle.setJustificationType(juce::Justification::centred);
     sliderTitle.setEditable(false);
@@ -66,7 +66,7 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
     auto sliderWidth { 150 };
     auto sliderHeight { 150 };
     frequencySlider.setBounds(halfWidth - (sliderWidth / 2),
-                              halfHeight - (sliderHeight / 2),
+                              halfHeight - (sliderHeight / 2) + 25,
                               sliderWidth,
                               sliderHeight);
 
@@ -74,7 +74,7 @@ void TriggerConditionAudioProcessorEditor::paint (juce::Graphics& g)
     auto headerHeight { 20 };
     header.setBounds(10, 10, headerWidth, headerHeight);
     
-    sliderTitle.setBounds(halfWidth - headerWidth / 2, 50, headerWidth, headerHeight);
+    sliderTitle.setBounds(halfWidth - headerWidth / 2, 75, headerWidth, headerHeight);
 }
 
 void TriggerConditionAudioProcessorEditor::resized()
