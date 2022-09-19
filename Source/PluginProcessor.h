@@ -14,7 +14,8 @@
 //==============================================================================
 /**
 */
-class TriggerConditionAudioProcessor  : public juce::AudioProcessor
+class TriggerConditionAudioProcessor  : public juce::AudioProcessor,
+                                        public juce::AudioProcessorValueTreeState::Listener
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
@@ -56,6 +57,8 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    virtual void parameterChanged (const juce::String &parameterID, float newValue) override;
 
 private:
     int messageCount { 0 };

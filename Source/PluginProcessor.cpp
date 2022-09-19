@@ -31,6 +31,7 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
     distribution(0, 100)
 {
     frequencyParameter  = parameters.getRawParameterValue ("frequency");
+    parameters.addParameterListener("frequency", this);
 }
 
 TriggerConditionAudioProcessor::~TriggerConditionAudioProcessor()
@@ -495,6 +496,11 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         }
     }
     midiMessages.swapWith(filteredMidi);
+}
+
+void TriggerConditionAudioProcessor::parameterChanged (const juce::String &parameterID, float newValue)
+{
+    if (parameterID == "frequency") filteredNoteCount = 0;
 }
 
 void TriggerConditionAudioProcessor::filterNote(juce::MidiBuffer& buffer, const juce::MidiMessageMetadata& messageMetadata, int passedMessagesPerPeriod, int periodLength)
