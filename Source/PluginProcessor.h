@@ -63,7 +63,9 @@ private:
     juce::AudioProcessorValueTreeState parameters;
     
     std::atomic<float>* frequencyParameter { nullptr };
-    int filteredNotes;
+    int filteredNoteCount;
+    
+    void filterNote(juce::MidiBuffer& buffer, const juce::MidiMessageMetadata& messageMetadata, int passedMessagesPerPeriod, int periodLength);
     
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution;

@@ -27,7 +27,7 @@ TriggerConditionAudioProcessor::TriggerConditionAudioProcessor()
                                                   juce::NormalisableRange<float>(0, 180, 1, 1.2),
                                                   101),
     }),
-    filteredNotes(0),
+    filteredNoteCount(0),
     distribution(0, 100)
 {
     frequencyParameter  = parameters.getRawParameterValue ("frequency");
@@ -155,22 +155,49 @@ void TriggerConditionAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         
         // We only want to intercept the message if it's a note-on
         if (message.isNoteOn()) {
+            
+            // Probability mode
             if (juce::roundToInt(frequencyParameter->load()) <= 100) {
-                if (randomNumber() > juce::roundToInt(frequencyParameter->load())) continue;
-            } else {
-                /*
-                if (++filteredNotes < juce::roundToInt(allowedMessageFrequencyParameter->load())) {
-                    continue;
-                } else {
-                    filteredNotes = 0;
-                }
-                */
-                continue;
+                if (randomNumber() <= juce::roundToInt(frequencyParameter->load())) filteredMidi.addEvent(message, metadata.samplePosition);
             }
+            
+            // Periodic mode
+            else {
+                ++filteredNoteCount;
+                
+                switch (juce::roundToInt(frequencyParameter->load())) {
+                    case 101:
+                        filterNote(filteredMidi, metadata, 1, 1);
+                        break;
+                        
+                    case 102:
+                        filterNote(filteredMidi, metadata, 1, 2);
+                        break;
+                        
+                    case 103:
+                        filterNote(filteredMidi, metadata, 1, 3);
+                        
+                    default:
+                        continue;
+                }
+            }
+        } else {
+            filteredMidi.addEvent(message, metadata.samplePosition);
         }
-        filteredMidi.addEvent(message, metadata.samplePosition);
     }
     midiMessages.swapWith(filteredMidi);
+}
+
+void TriggerConditionAudioProcessor::filterNote(juce::MidiBuffer& buffer, const juce::MidiMessageMetadata& messageMetadata, int passedMessagesPerPeriod, int periodLength)
+{
+    if (filteredNoteCount <= passedMessagesPerPeriod) {
+        auto message { messageMetadata.getMessage() };
+        buffer.addEvent(message, messageMetadata.samplePosition);
+    }
+    
+    if (filteredNoteCount == periodLength) {
+        filteredNoteCount = 0;
+    }
 }
 
 //==============================================================================
